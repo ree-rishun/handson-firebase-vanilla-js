@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-03-10T03:52:26+09:00",
+  "id": "docs",
+  "duration": 54,
+  "title": "【クラウド超入門】JS初心者向けFirebaseハンズオン",
+  "summary": "【クラウド超入門】JS初心者向けFirebaseハンズオン",
+  "source": ".\\handson.md",
+  "theme": "",
+  "status": [
+    "public"
+  ],
+  "category": [
+    "codelab",
+    "markdown"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/ree-rishun/handson-firebase-vanilla-js",
+  "url": "docs"
+}

@@ -1,0 +1,559 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>【クラウド超入門】JS初心者向けFirebaseハンズオン</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="handson-firebase-vanilla-js"
+                  title="【クラウド超入門】JS初心者向けFirebaseハンズオン"
+                  environment="web"
+                  feedback-link="https://github.com/ree-rishun/handson-firebase-vanilla-js">
+    
+      <google-codelab-step label="Firebaseとは？" duration="3">
+        <h2 is-upgraded>今回学ぶ製品</h2>
+<p>Firebaseには18個以上の製品があります。 今回はその中から3つ利用します。</p>
+<h2 is-upgraded>Firebase Authentication</h2>
+<p>Firebase Authenticationは、SNSなどの会員情報を用いた認証をアプリケーションに導入できます。</p>
+<p><a href="https://firebase.google.com/docs/auth?hl=ja" target="_blank">Firebase Authentication - Firebase</a></p>
+<h2 is-upgraded>Firebase Hosting</h2>
+<p>Firebase Hostingは、作成したWebアプリケーションを簡単にホスティングできるサービスです。</p>
+<p><a href="https://firebase.google.com/products/hosting?hl=ja" target="_blank">Firebase Hosting - Firebase</a></p>
+<h2 is-upgraded>Realtime Database</h2>
+<p>Realtime Databaseはリアルタイムでデータを共有/同期できるNoSQLのデータベースです。</p>
+<p><a href="https://firebase.google.com/products/realtime-database?hl=ja" target="_blank">Firebase Realtime Database - Firebase</a><a href="https://qiita.com/t_nakayama0714/items/0ff7644666f0122cfba1" target="_blank">NoSQLについて勉強する。 - Qiita</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="新規プロジェクトの作成（GUIの場合）" duration="10">
+        <p>それでは、最初に新規のプロジェクトを作成します。 まずは下記ボタンからコンソールを開いてください。</p>
+<p><a href="https://console.firebase.google.com/" target="_blank"><paper-button class="colored" raised>Firebaseコンソールへ移動</paper-button></a></p>
+<p>以下の画面が表示されたかと思いますので、<strong>[プロジェクトの作成]</strong>をクリックしてください。</p>
+<p class="image-container"><img src="img\ad7482501c84b89f.png"></p>
+<h2 is-upgraded>プロジェクト名の指定</h2>
+<p>プロジェクト名を決めます。 基本的に半角英数字で指定してください。</p>
+<p class="image-container"><img src="img\9f1b67da805f330d.png"></p>
+<p>尚、「-!‘&#34;」の記号は使用できます。</p>
+<h2 is-upgraded>Googleアナリティク</h2>
+<p>アナリティクスをOFFにしてください。 その後、[続行]を押して下さい。</p>
+<p class="image-container"><img src="img\d49c050735644055.png"></p>
+<h2 is-upgraded>作成完了</h2>
+<p>下の画面のようにプロジェクトの作成が完了したら[続行]を押してください。</p>
+<p class="image-container"><img src="img\c04f0d7884160ca2.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Webアプリの追加（GUIの場合）" duration="5">
+        <p>Webアプリケーションを追加します。 プロジェクトのホーム画面からWebのロゴをクリックしてください。</p>
+<p class="image-container"><img src="img\cf11b5444518c4a0.png"></p>
+<p>名前を指定して、[このアプリのFirebase Hostingも設定します。]にチェックを入れます。</p>
+<p class="image-container"><img src="img\a608817c2e163d8a.png"></p>
+<p>FirebaseSDKを追加します。 表示されているスクリプトをコピーしてください。</p>
+<p class="image-container"><img src="img\e4bdb4973a233958.png"></p>
+<p>index.htmlのhead内の「Firebase SDKの追加部分」にペーストしてください。</p>
+<pre><code language="language-html" class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&#34;utf-8&#34;&gt;
+    &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt;
+    &lt;title&gt;Welcome to Firebase Hosting&lt;/title&gt;
+
+    &lt;!-- Firebase SDKの追加部分 開始 --&gt;
+    &lt;!-- The core Firebase JS SDK is always required and must be listed first --&gt;
+    &lt;script src=&#34;/__/firebase/7.23.0/firebase-app.js&#34;&gt;&lt;/script&gt;
+
+    &lt;!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries --&gt;
+
+    &lt;!-- Initialize Firebase --&gt;
+    &lt;script src=&#34;/__/firebase/init.js&#34;&gt;&lt;/script&gt;
+    &lt;!-- Firebase SDKの追加部分 終了 --&gt;
+
+    &lt;link rel=&#34;stylesheet&#34; href=&#34;./css/style.css&#34;&gt;
+  &lt;/head&gt;
+</code></pre>
+<p>続いてFirebaseCLIのインストールについて出てきますが、こちらは事前準備の際に行っていただいた内容になりますので、そのまま次に進んでいただいて大丈夫です。</p>
+<p class="image-container"><img src="img\4193e304966eaf60.png"></p>
+<p>続いてもひとまず飛ばして、コンソールへ進んでください。</p>
+<p class="image-container"><img src="img\f5820f11eac6849d.png"></p>
+<p>これで、FirebaseへのWebアプリケーションの追加が完了しました。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="テンプレートのダウンロード" duration="3">
+        <p>今回は、1からCSSやHTMLを書いていくのは大変ですので、こちらで用意したプロジェクトを基に開発していただきます。 GitHub上にコードが置いてあるので、GitHubを利用したことのある方は、cloneをお願い致します。</p>
+<h2 is-upgraded>GitHubを利用されている方</h2>
+<p>任意のディレクトリにてクローンしてください。</p>
+<pre><code>git clone git@github.com:OthloTech/firebase-hands-on.git
+</code></pre>
+<h2 is-upgraded>GitHubを利用されていない方</h2>
+<p>まずは、以下のサイトにアクセスしてください。</p>
+<p><a href="https://github.com/OthloTech/firebase-hands-on" target="_blank">OthloTech/firebase-hands-on - GitHub</a></p>
+<p>続いて、緑色のcodeボタンを押して、「Download ZIP」を押してZIPファイルをダウンロードしてください。</p>
+<p class="image-container"><img src="img\87196144ff66680f.png"></p>
+<p>ダウンロードした zipファイルを開き、中のプロジェクトを任意のディレクトリにペーストしてください。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Firebase CLIへのログイン" duration="0">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="サーバとデプロイ" duration="5">
+        <p>今回利用するFirebaseHostingには開発したアプリケーションを簡単にデプロイできるコマンドが用意されています。</p>
+<pre><code>$ firebase deploy
+</code></pre>
+<p>コマンド実行後、デプロイが完了すると以下のようにURLがコンソールに表示されます。</p>
+<pre><code>Hosting URL: https://xxxxxxxxxxx.web.app
+</code></pre>
+<p>xx～の部分には最初に指定したプロジェクトのIDが入っており、このページにアクセスすると実際に開発したものが確認できます。</p>
+<p>しかし、毎回デプロイせずともローカルでもしっかりと確認したいですよね？ その場合は以下のコマンドでローカルでも確認できます。</p>
+<pre><code>$ firebase serve
+</code></pre>
+<p>今回のハンズオンでは基本的にローカルでの確認を行いながら進めていきます。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Authenticationの設定" duration="5">
+        <p>Authentication（認証機能）の設定を行います。 今回はGoogleアカウントによる認証のみに対応させます。</p>
+<p>左側のナビゲーションから<strong>Authentication</strong>を選択し、<strong>Sign-in method</strong>のタブを開いてください。</p>
+<p class="image-container"><img src="img\dcc88048f8867d5e.png"></p>
+<p>認証方法の一覧が表示されますので、Googleをクリックして下さい。</p>
+<p class="image-container"><img src="img\6583e6150859bf3f.png"></p>
+<p>表示されたら、</p>
+<ol type="1">
+<li><strong>有効にする</strong>をONに</li>
+<li><strong>プロジェクトのサポートメール</strong>を選択</li>
+<li><strong>保存</strong>を押してください。</li>
+</ol>
+<p class="image-container"><img src="img\4bfab42369f0350f.png"></p>
+<p>以上で Authentication の設定は完了です。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="FirebaseのSDKの読み込み" duration="2">
+        <p>Firebase用のSDKを追加します。 <code>public/index.html</code> を開き、以下のように <code>&lt;!-- FirebaseのSDK</code>追加部分 --&gt; の部分にSDKを追加してください。</p>
+<pre><code language="language-html" class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=&#34;utf-8&#34;&gt;
+  &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt;
+  &lt;title&gt;ChatApp&lt;/title&gt;
+
+  &lt;!-- FirebaseのSDK追加部分 開始 --&gt;
+  &lt;script defer src=&#34;/__/firebase/7.23.0/firebase-app.js&#34;&gt;&lt;/script&gt;
+  &lt;script defer src=&#34;/__/firebase/7.23.0/firebase-auth.js&#34;&gt;&lt;/script&gt;
+  &lt;script defer src=&#34;/__/firebase/7.23.0/firebase-database.js&#34;&gt;&lt;/script&gt;
+  &lt;script defer src=&#34;/__/firebase/init.js&#34;&gt;&lt;/script&gt;
+  &lt;!-- FirebaseのSDK追加部分 終了 --&gt;
+
+  &lt;link rel=&#34;stylesheet&#34; href=&#34;./css/style.css&#34;&gt;
+  &lt;link href=&#34;https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt;
+&lt;/head&gt;
+</code></pre>
+<p><code>/__/firebase/firebase-app.js</code> と <code>/__/firebase/init.js</code> は必ず必要ですが、<code>/__/firebase/7.23.0/firebase-auth.js</code> や <code>/__/firebase/7.23.0/firebase-database.js</code> は利用するプロダクトを追加していますので、プロジェクトによって呼び出す製品は変わってきます。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="認証処理の作成" duration="10">
+        <p>それでは、認証処理を実装していきます。</p>
+<h2 is-upgraded>認証処理の作成</h2>
+<p><code>public/js/auth.js</code> へ以下のコードを追加します。</p>
+<pre><code language="language-javascript" class="language-javascript">// 認証処理作成箇所
+function auth() {
+  // TODO: Googleプロバイダオブジェクトのインスタンスを作成
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  // TODO: Google認証のポップアップ表示
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) =&gt; { // 認証成功
+      // TODO: ユーザ情報の更新関数
+
+      // モーダルを非表示にする
+      document.getElementById(&#39;signin_modal_layout&#39;).style.display = &#39;none&#39;;
+
+      // ページ情報を読み込む
+      pageInit();
+    })
+    .catch(function (error) { // 認証失敗
+      alert(&#34;アカウント連携に失敗しました&#34;);
+      console.log({ error });
+    });
+}
+</code></pre>
+<p>ここでは、Google認証のポップアップを呼び出し認証を行った結果を受け取ります。</p>
+<p>１． Googleプロバイダオブジェクトのインスタンスを作成</p>
+<pre><code language="language-javascript" class="language-javascript">  // TODO: Googleプロバイダオブジェクトのインスタンスを作成
+  const provider = new firebase.auth.GoogleAuthProvider();
+</code></pre>
+<p>２． 認証処理</p>
+<pre><code language="language-javascript" class="language-javascript">  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) =&gt; { // 認証成功
+      // ユーザ情報の更新
+      updateUserinfo(result.user);
+
+      // モーダルを非表示にする
+      document.getElementById(&#39;signin_modal_layout&#39;).style.display = &#39;none&#39;;
+
+      // ページ情報を読み込む
+      pageInit();
+    })
+    .catch(function (error) { // 認証失敗
+      alert(&#34;アカウント連携に失敗しました&#34;);
+      console.log({ error });
+    });
+</code></pre>
+<p>３． 成功した場合、認証結果（ユーザ情報）を受け取る</p>
+<pre><code language="language-javascript" class="language-javascript">    .then((result) =&gt; { // 認証成功
+      // ユーザ情報の更新
+      updateUserinfo(result.user);
+
+      // モーダルを非表示にする
+      document.getElementById(&#39;signin_modal_layout&#39;).style.display = &#39;none&#39;;
+
+      // ページ情報を読み込む
+      pageInit();
+    })
+</code></pre>
+<p>４． 失敗した場合、エラーをアラートにて表示</p>
+<pre><code language="language-javascript" class="language-javascript">    .catch(function (error) { // 認証失敗
+      alert(&#34;アカウント連携に失敗しました&#34;);
+      console.log({ error });
+    });
+</code></pre>
+<h2 is-upgraded>ログインボタンを作成する</h2>
+<p>ログイン用のモーダルを追加します。 39行目に以下のコードを追記してください。</p>
+<p><code>public/index.html</code></p>
+<pre><code language="language-javascript" class="language-javascript">  &lt;!-- TODO: ログインモーダルを追加 --&gt;
+  &lt;div id=&#34;signin_modal_layout&#34;&gt;
+    &lt;div id=&#34;signin_modal&#34;&gt;
+      &lt;h2&gt;Googleアカウントでログイン&lt;/h2&gt;
+
+      &lt;button
+        class=&#34;submit_button&#34;
+        onclick=&#34;auth()&#34;&gt;
+        Googleでサインイン
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+</code></pre>
+<p>このコードにより、ページを読み込むたびに認証を行うようになりました。</p>
+<h2 is-upgraded>ログインしてみる</h2>
+<p>それでは、ローカルで動作チェックしてみましょう。 以下のコマンドを実行してローカルでアプリを起動してください。</p>
+<pre><code>$ firebase serve
+</code></pre>
+<p>続いて、localhost:5000にアクセスしてください。</p>
+<p><a href="http://localhost:5000" target="_blank"><paper-button class="colored" raised>ローカルでテスト</paper-button></a></p>
+<p>すると、早速ポップアップがブロックされてしまい認証が失敗してしまいます。</p>
+<p class="image-container"><img src="img\99cfc0df85d799a5.png"></p>
+<p>リンクバーにあるポップアップブロックのアイコンをクリックし、<strong>http://localhost:5000 のポップアップとリダイレクトを常に許可する</strong>にチェックを入れ、<strong>完了</strong>を押してください。</p>
+<p class="image-container"><img src="img\41e3fa641e8c9d8b.png"></p>
+<p>すると、画像のようにアカウント一覧が表示されるかと思います。</p>
+<p class="image-container"><img src="img\c5cd784282d14f8a.png"></p>
+<p>自身のアカウントを選択し、ログインしてください。 以下のようにポップアップが表示されればログイン成功です！</p>
+<p class="image-container"><img src="img\a513ec637760ac30.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="ユーザ情報の格納" duration="0">
+        <p>Duration 00:10:00</p>
+<p>ユーザが登録された際に合わせてFirestoreへデータを格納する処理を追加します。</p>
+<p><code>public/js/auth.js</code>に以下の処理を追加します。</p>
+<pre><code language="language-javascript" class="language-javascript">// ユーザ情報登録/更新
+function updateUserinfo(user) {
+  // TODO: Firestoreオブジェクトのインスタンスを作成
+  const  db = firebase.firestore();
+
+  // TODO: DBにユーザ情報を登録
+  db.collection(&#34;users&#34;).doc(user.uid).set({
+    uid: user.uid,                  // UID
+    displayName: user.displayName,  // 表示名
+    photoURL: user.photoURL         // アイコン
+  })
+    .then(() =&gt; { // 成功時
+      console.log(&#34;Document successfully written!&#34;);
+    })
+    .catch((error) =&gt; { // 失敗時
+      console.error(&#34;Error writing document: &#34;, error);
+    });
+}
+</code></pre>
+<p>ここでは、 <code>set()</code> メソッドを用いて、値をデータベースへ格納しています。 セットした値は users/XXXXXX(ユーザID) に格納されます。 もし既に同じユーザIDが格納されている場合は上書されます。</p>
+<p>また、先程追加したコードも一部修正します。</p>
+<pre><code language="language-javascript" class="language-javascript">// 認証処理作成箇所
+function auth() {
+  // TODO: Googleプロバイダオブジェクトのインスタンスを作成
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  // TODO: Google認証のポップアップ表示
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) =&gt; { // 認証成功
+      // TODO: ユーザ情報の更新関数
+      updateUserinfo(result.user);
+
+      // モーダルを非表示にする
+      document.getElementById(&#39;signin_modal_layout&#39;).style.display = &#39;none&#39;;
+
+      // ページ情報を読み込む
+      pageInit();
+    })
+    .catch(function (error) { // 認証失敗
+      alert(&#34;アカウント連携に失敗しました&#34;);
+      console.log({ error });
+    });
+}
+</code></pre>
+<p>追加が完了後、再度 localhost:5000 へアクセスしログインしてみてください。</p>
+<p>ログインが完了したら、Firebaseのコンソールへアクセスし、<strong>Realtime Database</strong> を開いてください。 以下のように usersドキュメントが追加されていればOKです。</p>
+<p class="image-container"><img src="img\ed2cc49f7b290888.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="サブスクの新規作成" duration="0">
+        <p>Duration 00:05:00</p>
+<p><code>public/js/firestore.js</code>へ以下を追加してください。</p>
+<pre><code language="language-javascript" class="language-javascript">// サブスクの新規追加処理
+function addSubsc() {
+  const form = document.forms[&#39;add_form&#39;].getElementsByTagName(&#34;input&#34;);
+
+  // TODO: ログイン中のユーザ情報を取得
+  const user = firebase.auth().currentUser;
+
+  // TODO: Firestoreオブジェクトのインスタンスを作成
+  const  db = firebase.firestore();
+
+  // TODO: サブスクの新規追加とユーザ情報への追加
+  db.collection(&#39;subscription&#39;).add({
+    title: form[&#39;title&#39;].value, // サブスク名
+    price: form[&#39;price&#39;].value  // 価格
+  })
+    .then((docRef) =&gt; { // 成功した場合
+      // ユーザのサブスク一覧に追加
+      db.collection(&#39;users&#39;).doc(user.uid).collection(&#39;subscription&#39;).doc(docRef.id).set({
+        id: docRef.id,
+        startedAt: form[&#39;startedAt&#39;].value
+      });
+
+      // ページの表示を変更する
+      pageInit();
+
+      // モーダルを閉じる
+      switchAddModal();
+    })
+    .catch((error) =&gt; { // 失敗した場合
+      console.error(&#34;Error adding document: &#34;, error);
+    });
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="サブスクの一覧取得" duration="0">
+        <p>Duration 00:05:00</p>
+<p><code>public/js/firestore.js</code>へ以下を追加してください。</p>
+<pre><code language="language-javascript" class="language-javascript">// サブスクの一覧を取得
+function printSubscription() {
+  // 一覧の追加先エレメントを変数へ格納
+  const user = firebase.auth().currentUser;
+
+  // サブスク一覧リストを初期化
+  subscription_list = {};
+
+  // TODO: Firestoreオブジェクトのインスタンスを作成
+  const  db = firebase.firestore();
+
+  // TODO: サブスクの一覧を取得
+  db.collection(&#39;users&#39;)
+    .doc(user.uid).collection(&#39;subscription&#39;)
+    .get().then((querySnapshot) =&gt; {
+    querySnapshot.forEach((doc) =&gt; {
+      // 取得したサブスクを1個ずつ処理
+      db.collection(&#39;subscription&#39;).doc(doc.data().id).get()
+        .then((subsc_doc) =&gt; {
+          if (doc.exists) { // ドキュメントが取得できたとき
+            // 開始日の日付のみを取得
+            const day = new Date(doc.data().startedAt);
+
+            // サブスク一覧に格納
+            subscription_list[doc.data().id] =
+              {
+                id: doc.data().id,
+                title: subsc_doc.data().title,
+                price: subsc_doc.data().price,
+                day: ( &#39;00&#39; + day.getDate() ).slice( -2 ),
+                startedAt: doc.data().startedAt,
+                type: &#39;month&#39;,
+              }
+          } else {  // ドキュメントが見つからなかった場合
+            console.log(&#34;No such document!&#34;);
+          }
+        }).catch((error) =&gt; {
+        console.log(&#34;Error getting document:&#34;, error);
+      })
+        .then(() =&gt; {
+          updateList();
+        })
+    });
+  });
+}
+
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="サブスクの情報を編集" duration="0">
+        <p>Duration 00:05:00</p>
+<p><code>public/js/firestore.js</code>へ以下を追加してください。</p>
+<pre><code language="language-javascript" class="language-javascript">// 編集結果の保存
+function saveEdit(id) {
+  // フォームを取得
+  const form = document.forms[&#39;edit_form&#39;].getElementsByTagName(&#34;input&#34;);
+  const  db = firebase.firestore();
+
+  // TODO: サブスクの情報を更新
+  db.collection(&#39;subscription&#39;).doc(id).update({
+    title: form[&#39;title&#39;].value, // サブスク名
+    price: form[&#39;price&#39;].value  // 価格
+  })
+    .then((docRef) =&gt; { // 成功した場合
+    })
+    .catch((error) =&gt; { // 失敗した場合
+      console.error(&#34;Error adding document: &#34;, error);
+    });
+
+  // ページ内のコンテンツをリフレッシュ
+  pageInit();
+
+  // 非表示にする
+  document.getElementById(&#39;edit_modal_layout&#39;).style.display = &#39;none&#39;;
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="サブスクの削除" duration="0">
+        <p>Duration 00:05:00</p>
+<p><code>public/js/firestore.js</code>へ以下を追加してください。</p>
+<pre><code language="language-javascript" class="language-javascript">function subsc_cancel(id) {
+  // TODO: ログイン中のユーザ情報を取得
+  const user = firebase.auth().currentUser;
+
+  // TODO: Firestoreオブジェクトのインスタンスを作成
+  const  db = firebase.firestore();
+
+  // TODO: サブスクをFirestoreから削除する
+  db.collection(&#39;subscription&#39;).doc(id).delete().then(() =&gt; {
+    console.log(&#34;Document successfully deleted!&#34;);
+  }).catch((error) =&gt; {
+    console.error(&#34;Error removing document: &#34;, error);
+  });
+
+  // TODO: サブスクのIDをユーザ情報から削除する
+  db.collection(&#39;users&#39;).doc(user.uid).collection(&#39;subscription&#39;).doc(id).delete().then(() =&gt; {
+    console.log(&#34;Document successfully deleted!&#34;);
+  }).catch((error) =&gt; {
+    console.error(&#34;Error removing document: &#34;, error);
+  });
+
+  // ページ内のコンテンツをリフレッシュ
+  pageInit();
+
+  // 非表示にする
+  document.getElementById(&#39;edit_modal_layout&#39;).style.display = &#39;none&#39;;
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="まとめ" duration="0">
+        <p>Duration 00:05:00</p>
+<p>ハンズオンお疲れ様でした。</p>
+<p>今回のハンズオンでは、Firebaseの機能としては、</p>
+<ul>
+<li>Firebase CLI  <ul>
+<li>Firebaseをコマンドラインで作成 / 編集 / 操作できるツール</li>
+</ul>
+</li>
+<li>Firebase Hosting  <ul>
+<li>Webアプリをデプロイできる</li>
+</ul>
+</li>
+<li>Firebase Authentication  <ul>
+<li>認証を導入できる</li>
+</ul>
+</li>
+<li>Firestore  <ul>
+<li>CRUDできる</li>
+</ul>
+</li>
+</ul>
+<p>を実際に使用しました。</p>
+<p>また、Firestoreでは以下の4つのメソッドを使用しました。</p>
+<ul>
+<li><code>set()</code> :</li>
+<li><code>get()</code> :</li>
+<li><code>update()</code> :</li>
+<li><code>delete()</code> :</li>
+</ul>
+<p>Firebaseの機能は勿論これだけではありません。 ただ、一部分を触っただけでもわかる通り、簡単に実装でき、高品質のアプリケーションを開発することが可能です。 趣味の開発やハッカソンやコンテスト等で導入してみてはいかがでしょうか？</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="参考にした記事" duration="1">
+        <ul>
+<li><a href="https://firebase.google.com/docs/firestore/firestore-for-rtdb?hl=ja" target="_blank">Firebase Realtime Database で Cloud Firestore を使用する - Firebase</a></li>
+<li><a href="https://firebase.google.com/docs/database/rtdb-vs-firestore?hl=ja" target="_blank">データベースを選択: Cloud Firestore または Realtime Database</a></li>
+<li><a href="https://techblog.kayac.com/rtdb-vs-firestore" target="_blank">Firebase Realtime DatabaseとFirestoreを使い分けていこうなという話 - KAYAC</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>

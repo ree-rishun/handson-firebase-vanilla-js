@@ -1,0 +1,352 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>【クラウド超入門】JS初心者向けFirebaseハンズオン</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="docs"
+                  title="【クラウド超入門】JS初心者向けFirebaseハンズオン"
+                  environment="web"
+                  feedback-link="https://github.com/ree-rishun/handson-firebase-vanilla-js">
+    
+      <google-codelab-step label="Firebaseとは？" duration="3">
+        <h2 is-upgraded>今回学ぶ製品 </h2>
+<p>Firebaseには18個以上の製品があります。 今回はその中から3つ利用します。  </p>
+<h2 is-upgraded>Firebase Authentication </h2>
+<p> Firebase Authenticationは、SNSなどの会員情報を用いた認証をアプリケーションに導入できます。  <a href="https://firebase.google.com/docs/auth?hl=ja" target="_blank">Firebase Authentication - Firebase</a>  </p>
+<h2 is-upgraded>Firebase Hosting </h2>
+<p> Firebase Hostingは、作成したWebアプリケーションを簡単にホスティングできるサービスです。  <a href="https://firebase.google.com/products/hosting?hl=ja" target="_blank">Firebase Hosting - Firebase</a>  </p>
+<h2 is-upgraded>Realtime Database </h2>
+<p> Realtime Databaseはリアルタイムでデータを共有/同期できるNoSQLのデータベースです。  <a href="https://firebase.google.com/products/realtime-database?hl=ja" target="_blank">Firebase Realtime Database - Firebase</a><a href="https://qiita.com/t_nakayama0714/items/0ff7644666f0122cfba1" target="_blank">NoSQLについて勉強する。 - Qiita</a>  </p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="新規プロジェクトの作成（GUIの場合）" duration="10">
+        <p><a href="https://console.firebase.google.com/" target="_blank"><paper-button class="colored" raised>Firebaseコンソールへ移動</paper-button></a>  以下の画面が表示されたかと思いますので、<strong>[プロジェクトの作成]</strong>をクリックしてください。  <img src="img\ad7482501c84b89f.png">  </p>
+<h2 is-upgraded>プロジェクト名の指定 </h2>
+<p>プロジェクト名を決めます。 基本的に半角英数字で指定してください。  <img src="img\9f1b67da805f330d.png">  尚、「-!‘&#34;」の記号は使用できます。   </p>
+<h2 is-upgraded>Googleアナリティク </h2>
+<p>アナリティクスをOFFにしてください。 その後、[続行]を押して下さい。  <img src="img\d49c050735644055.png">  </p>
+<h2 is-upgraded>作成完了 </h2>
+<p>下の画面のようにプロジェクトの作成が完了したら[続行]を押してください。  <img src="img\c04f0d7884160ca2.png">   </p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Webアプリの追加（GUIの場合）" duration="5">
+        <p><img src="img\cf11b5444518c4a0.png">  名前を指定して、[このアプリのFirebase Hostingも設定します。]にチェックを入れます。  <img src="img\a608817c2e163d8a.png">  FirebaseSDKを追加します。 表示されているスクリプトをコピーしてください。  <img src="img\e4bdb4973a233958.png">  index.htmlのhead内の「Firebase SDKの追加部分」にペーストしてください。  &#34;`html &lt;!DOCTYPE html&gt;     </p>
+<pre><code>&lt;meta charset=&#34;utf-8&#34;&gt;
+&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt;
+&lt;title&gt;Welcome to Firebase Hosting&lt;/title&gt;
+</code></pre>
+<pre><code>&lt;!-- Firebase SDKの追加部分 開始 --&gt;
+&lt;!-- The core Firebase JS SDK is always required and must be listed first --&gt;
+&lt;script src=&#34;/__/firebase/7.23.0/firebase-app.js&#34;&gt;&lt;/script&gt;
+</code></pre>
+<pre><code>&lt;!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries --&gt;
+</code></pre>
+<pre><code>&lt;!-- Initialize Firebase --&gt;
+&lt;script src=&#34;/__/firebase/init.js&#34;&gt;&lt;/script&gt;
+&lt;!-- Firebase SDKの追加部分 終了 --&gt;
+</code></pre>
+<pre><code>&lt;link rel=&#34;stylesheet&#34; href=&#34;./css/style.css&#34;&gt;
+</code></pre>
+<p> &#34;`  続いてFirebaseCLIのインストールについて出てきますが、こちらは事前準備の際に行っていただいた内容になりますので、そのまま次に進んでいただいて大丈夫です。  <img src="img\4193e304966eaf60.png">  続いてもひとまず飛ばして、コンソールへ進んでください。  <img src="img\f5820f11eac6849d.png">  これで、FirebaseへのWebアプリケーションの追加が完了しました。   </p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="テンプレートのダウンロード" duration="3">
+        <h2 is-upgraded>GitHubを利用されている方 </h2>
+<p> 任意のディレクトリにてクローンしてください。  <code>console<br>git clone git@github.com:OthloTech/firebase-hands-on.git</code><br>  </p>
+<h2 is-upgraded>GitHubを利用されていない方 </h2>
+<p> まずは、以下のサイトにアクセスしてください。  <a href="https://github.com/OthloTech/firebase-hands-on" target="_blank">OthloTech/firebase-hands-on - GitHub</a>  続いて、緑色のcodeボタンを押して、「Download ZIP」を押してZIPファイルをダウンロードしてください。  <img src="img\87196144ff66680f.png">  ダウンロードした zipファイルを開き、中のプロジェクトを任意のディレクトリにペーストしてください。  </p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Databaseの設定" duration="1">
+        <pre><code>&#34;.read&#34;: false,
+&#34;.write&#34;: false
+</code></pre>
+<p>} } <br><br><code>初期状態で�</code>��このようになっているかと思います。<br>これを、以下のように書き換えてください。<br><br>json {   /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */   &#34;rules&#34;: { </p>
+<pre><code>&#34;.read&#34;: true,
+&#34;.write&#34;: true
+</code></pre>
+<p>} } &#34;`  ここで何を変更したのかというと、 </p>
+<ul>
+<li>データベースの読み取りがfalse（誰でも読み取り不可）をtrue（誰でも読み取り可） </li>
+<li>データベースの書き込みがfalse（誰でも書き込み不可）をtrue（誰でも書き込み可） という風に変更しました。これは誰でも読み書きができるという点では安全性に問題があります。     サーバとデプロイ   <code>console<br>$ firebase deploy</code><br>  コマンド実行後、デプロイが完了すると以下のようにURLがコンソールに表示されます。  <br><code>Hosting URL: https://xxxxxxxxxxx.web.app</code><br>  xx～の部分には最初に指定したプロジェクトのIDが入っており、このページにアクセスすると実際に開発したものが確認できます。  しかし、毎回デプロイせずともローカルでもしっかりと確認したいですよね？ その場合は以下のコマンドでローカルでも確認できます。  <code>console<br>$ firebase serve</code><br>  今回のハンズオンでは基本的にローカルでの確認を行いながら進めていきます。    Authenticationの設定   <strong>Authentication</strong>を選択し、<strong>Sign-in method</strong>のタブを開いてください。  <img src="img\dcc88048f8867d5e.png">  認証方法の一覧が表示されますので、Googleをクリックして下さい。  <img src="img\6583e6150859bf3f.png">  表示されたら、  </li>
+</ul>
+<ol type="1">
+<li><strong>有効にする</strong>をONに </li>
+<li><strong>プロジェクトのサポートメール</strong>を選択 </li>
+<li><strong>保存</strong>を押してください。  <img src="img\4bfab42369f0350f.png">  以上で Authentication の設定は完了です。    FirebaseのSDKの読み込み   <code>public/index.html</code> を開き、以下のように <code>&lt;!-- FirebaseのSDK</code>追加部分 --&gt; の部分にSDKを追加してください。  <code>html<br>&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>&lt;head&gt;<br>&lt;meta charset=&#34;utf-8&#34;&gt;<br>&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt;<br>&lt;title&gt;ChatApp&lt;/title&gt;<br><br>&lt;!-- FirebaseのSDK追加部分 開始 --&gt;<br>&lt;script defer src=&#34;/__/firebase/7.23.0/firebase-app.js&#34;&gt;&lt;/script&gt;<br>&lt;script defer src=&#34;/__/firebase/7.23.0/firebase-auth.js&#34;&gt;&lt;/script&gt;<br>&lt;script defer src=&#34;/__/firebase/7.23.0/firebase-database.js&#34;&gt;&lt;/script&gt;<br>&lt;script defer src=&#34;/__/firebase/init.js&#34;&gt;&lt;/script&gt;<br>&lt;!-- FirebaseのSDK追加部分 終了 --&gt;<br><br>&lt;link rel=&#34;stylesheet&#34; href=&#34;./css/style.css&#34;&gt;<br>&lt;link href=&#34;https://fonts.googleapis.com/css2?fam</code>ily=Noto+Sans+JP&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt;<br>&lt;/head&gt;<br>  <code>/__/firebase/firebase-app.js</code> と <code>/__/firebase/init.js</code> は必ず必要ですが、<code>/__/firebase/7.23.0/firebase-auth.js</code> や <code>/__/firebase/7.23.0/firebase-database.js</code> は利用するプロダクトを追加していますので、プロジェクトによって呼び出す製品は変わってきます。    認証処理の作成     <h2 is-upgraded>認証処理の作成 </h2>
+  <code>public/js/index.js</code> へ以下のコードを追加します。  <code>javascript<br>// 認証処理作成箇所<br>function auth() {<br>const provider = new firebase.auth.GoogleAuthProvider();<br>// Google認証のポップアップ表示<br>firebase<br>.auth()<br>.signInWithPopup(provider)<br>.then((result) =&gt; {<br>  // 認証成功<br>  alert(&#34;アカウント連</code>携に成功しました&#34;);<br>  console.log(result);<br>})<br>.catch(function (error) {<br>  // 認証失敗<br>  alert(&#34;アカウント連携に失敗しました&#34;);<br>  console.log({ error });<br>});<br>}<br>  ここでは、Google認証のポップアップを呼び出し認証を行った結果を受け取ります。  １． Googleプロバイダオブジェクトのインスタンスを作成  <code>javascript<br>const provider = new firebase.auth.GoogleAuthProvider();</code><br>  ２． 認証処理  <code>javascript<br>firebase<br>.auth()<br>.signInWithPopup(provider)<br>.then((result) =&gt; {<br>  // 認証成功<br>  alert(&#34;アカウント連携に成功しました&#34;);<br>  console.log(result);<br>})<br>.catch(fun</code>ction (error) {<br>  // 認証失敗<br>  alert(&#34;アカウント連携に失敗しました&#34;);<br>  console.log({ error });<br>});<br>  ３． 成功した場合、認証結果（ユーザ情報）を受け取る  <code>javascript<br>.then((result) =&gt; {<br>  // 認証成功<br>  alert(&#34;ア�</code>�ウント連携に成功しました&#34;);<br>  console.log(result);<br>})<br>  ４． 失敗した場合、エラーをアラートにて表示  <code>javascript<br>.catch(function (error) {<br>  // 認証失敗<br>  alert(&#34;ア�</code>�ウント連携に失敗しました&#34;);<br>  console.log({ error });<br>});<br>    <h2 is-upgraded>ページを開いた際に認証を呼び出す </h2>
+   作成した認証処理をページのロード時に呼び出すようにします。 以下のコードを追記してください。  <code>javascript<br>// 認証の呼び出し箇所<br>document.addEventListener(&#34;DOMContentLoaded&#34;, ()</code> =&gt; {<br>// DOMのリロードが終わったタイミングで認証開始<br>auth();<br>});<br>  このコードにより、ページを読み込むたびに認証を行うようになりました。    <h2 is-upgraded>テスト </h2>
+   それでは、ローカルで動作チェックしてみましょう。 以下のコマンドを実行してローカルでアプリを起動してください。  <br><code>$ firebase serve</code><br>  続いて、localhost:5000にアクセスしてください。  <a href="http://localhost:5000" target="_blank"><paper-button class="colored" raised>ローカルでテスト</paper-button></a>  すると、早速ポップアップがブロックされてしまい認証が失敗してしまいます。  <img src="img\99cfc0df85d799a5.png">  リンクバーにあるポップアップブロックのアイコンをクリックし、<strong>http://localhost:5000 のポップアップとリダイレクトを常に許可する</strong>にチェックを入れ、<strong>完了</strong>を押してください。  <img src="img\41e3fa641e8c9d8b.png">  すると、画像のようにアカウント一覧が表示されるかと思います。  <img src="img\c5cd784282d14f8a.png">  自身のアカウントを選択し、ログインしてください。 以下のようにポップアップが表示されればログイン成功です！  <img src="img\a513ec637760ac30.png">     ユーザ一覧の作成   Duration 00:10:00  左側にユーザ一覧を作成します。  <img src="img\77b133da0c378f16.png">    <h2 is-upgraded>ユーザ情報の登録処理 </h2>
+   まずは、ユーザ情報をデータベースに更新します。 先程作成した認証処理はAuthentication側がユーザ情報を持っていますので、現状ではデータベース内は空です。 そのため、ユーザ登録された内容をデータベースへ格納する処理を追加します。  &#34;`javascript // —– ユーザ情報登録/更新処理 —– // function updateUserinfo(user) { const userDb = firebase.database().ref(&#34;users/&#34; + user.uid);  userDb.set({   <pre><code>uid: user.uid,
+displayName: user.displayName,
+photoURL: user.photoURL,
+</code></pre>
+}); } <br><br><code>ここでは、 `set()` メソッドを用いて、値</code>をデータベースへ格納しています。<br>セットした値は users/XXXXXX(ユーザID) に格納されます。<br>もし既に同じユーザIDが格納されている場合は上書されます。<br><br>また、先程追加したコードも一部修正します。<br><br>javascript // —– 認証処理作成箇所 —– // function auth() { const provider = new firebase.auth.GoogleAuthProvider(); // Google認証のポップアップ表示 firebase   .auth()   .signInWithPopup(provider)   .then((result) =&gt; {   <pre><code>// 新規コード追加部分
+console.log({ result });
+updateUserinfo(result.user);
+</code></pre>
+})   .catch(function (error) {   <pre><code>// 認証失敗
+alert(&#34;アカウント連携に失敗しました&#34;);
+console.log({ error });
+</code></pre>
+}); } &#34;<br><br>// 新規コード追加部分`と書いてある部分を元々の内容を削除し、2行を追加してください。 追加が完了後、再度 localhost:5000 へアクセスしログインしてみてください。  ログインが完了したら、Firebaseのコンソールへアクセスし、<strong>Realtime Database</strong> を開いてください。 以下のように usersドキュメントが追加されていればOKです。  <img src="img\ed2cc49f7b290888.png">     <h2 is-upgraded>ユーザ一覧を表示 </h2>
+   RealTimeDatabase へ保存したユーザ情報を表示します。 以下のコードを追加してください。  &#34;`javascript // —– ユーザ一覧表示処理 —– // function renderUserslist(user) { const usersElm = document.querySelector(&#34;#users_list&#34;);  // コールバック関数 return (snapshot) =&gt; {   <pre><code>const newUsers = [];
+</code></pre>
+<pre><code>// 自身を追加
+newUsers.push(`
+  &lt;div class=&#34;users_list__box-me&#34;&gt;
+    &lt;div class=&#34;users_list__icon&#34;&gt;
+      &lt;img src=&#34;${escapeHTML(user.photoURL)}&#34; /&gt;
+    &lt;/div&gt;&lt;div class=&#34;users_list__status&#34;&gt;
+      &lt;p class=&#34;users_list__name&#34;&gt;${escapeHTML(user.displayName)}&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`);
+</code></pre>
+<pre><code>// ユーザ情報を一つずつ取得し、表示用HTMLを組み立て
+snapshot.forEach((send_user) =&gt; {
+    // 自分以外のユーザのみ追加
+    if (user.uid !== send_user.val().uid) {
+        newUsers.push(`
+  &lt;div class=&#34;users_list__box&#34;&gt;
+    &lt;div class=&#34;users_list__icon&#34;&gt;
+      &lt;img src=&#34;${escapeHTML(send_user.val().photoURL)}&#34; /&gt;
+    &lt;/div&gt;&lt;div class=&#34;users_list__status&#34;&gt;
+      &lt;p class=&#34;users_list__name&#34;&gt;${escapeHTML(send_user.val().displayName)}&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`);
+    }
+});
+// ユーザ一覧表示エリアに描画
+usersElm.innerHTML = `
+</code></pre>
+<pre><code>${newUsers.join(&#34;&#34;)}
+</code></pre>
+ `;   <pre><code>// スクロール最下部へ移動
+usersElm.scrollTop = usersElm.scrollHeight;
+</code></pre>
+} } <br><br><code>少しコードが長くなってしまいましたが�</code>�要はユーザ情報を取得し、HTMLと結合させて描画しています。<br>自身の情報は必ず一番上に来るようにするため、一番最初に格納しています。<br>全ユーザ情報を描画する際には自身の情報は飛ばす用に if文を用いて分岐しています。<br><br>続いて、ユーザ情報更新処理側にコードを追加します。<br><br>javascript // —– ユーザ情報登録/更新処理 —– // function updateUserinfo(user) { const userDb = firebase.database().ref(&#34;users/&#34; + user.uid);  userDb.set({   <pre><code>uid: user.uid,
+displayName: user.displayName,
+photoURL: user.photoURL,
+</code></pre>
+});  // 新規コード追加部分 const usersDb = firebase.database().ref(&#34;users&#34;); usersDb.on(&#34;value&#34;, renderUserslist(user)); } &#34;<br><br><code>末尾2行</code>が新たに追加した部分です。<br>使用しているon()` メソッドによりデータベースの変更を監視することが出来ます。 そのため、新しくユーザが追加された場合もページをリロードすることなく追加されるようになります。    <h2 is-upgraded>実際に表示してみる </h2>
+   さて、再びログインしてみてください。 ログイン後、左側に自分のアイコンと名前が表示されていれば完了です。     メッセージの送信処理作成   Duration 00:10:00  続いてメッセージの送信処理を作成します。    <h2 is-upgraded>送信処理部分作成 </h2>
+   以下のコードを追加してください。  &#34;`javascript // —– メッセージ送信処理箇所 —– // function enableMessages(user) { const messagesDb = firebase.database().ref(&#34;messages&#34;);  // メッセージ送信イベント登録 const messageTextInput = document.querySelector(&#34;#message-text&#34;); const messageButton = document.querySelector(&#34;#message-submit-button&#34;);  // 送信ボタンが押された場合 messageButton.addEventListener(&#34;click&#34;, () =&gt; {   <pre><code>// DBへ新規メッセージの登録
+messagesDb.push({
+    userId: user.uid,
+    date: new Date().getTime(), // タイムスタンプをセット (例：1602862031298)
+    text: messageTextInput.value,
+});
+// フォームの内容をリセット
+messageTextInput.value = &#34;&#34;;
+</code></pre>
+}); } &#34;<br><br><code>ここでは、送信</code>ボタンが押された際にテキストエリア内の文字列をデータベースへメッセージとして保存する処理を行っています。<br>push()` メソッドを使うことでデータベース内の message 直下に  </li>
+</ol>
+<ul>
+<li>ユーザID </li>
+<li>送信日時 </li>
+<li>送信内容  が格納されます。 尚、 <code>push()</code> メソッドを利用した場合のメッセージ毎のIDはユニークなIDをランダムに振り分けられます。     <h2 is-upgraded>呼び出し部分の追加 </h2>
+   送信処理部分を作成しましたので、続いて送信処理を呼び出す部分を追記したいと思います。  &#34;`javascript // —– 認証処理作成箇所 —– // function auth() { const provider = new firebase.auth.GoogleAuthProvider(); // Google認証のポップアップ表示 firebase   .auth()   .signInWithPopup(provider)   .then((result) =&gt; {   <pre><code>console.log({ result });
+updateUserinfo(result.user);
+</code></pre>
+<pre><code>// 新規コード追加部分
+enableMessages(result.user);
+</code></pre>
+})   .catch(function (error) {   <pre><code>// 認証失敗
+alert(&#34;アカウント連携に失敗しました&#34;);
+console.log({ error });
+</code></pre>
+}); } &#34;<br><br>// 新規コード追加部分` の後ろの1行を追加してください。     <h2 is-upgraded>データベースへメッセージが格納されることを確認 </h2>
+   ここまで完了したら、一度メッセージを送信してみてください。 送信しても何も表示されないかと思います。 しかし、データベースを再度開いてもらうと messages が新たに追加されており、内容が確認できるかと思います。  <img src="img\54ab95edbacac5a1.png">  これで送信処理の完成です。     メッセージの表示処理   Duration 00:10:00  先程追加した送信処理で送信した内容、他のユーザから送信された内容を表示できるように処理を追加します。    <h2 is-upgraded>ユーザ一覧をグローバル変数で管理 </h2>
+   メッセージには送信したユーザに関する情報が、ユニークなIDしかありません。 そのため、ユーザ名やアイコンを取得するにはユーザの情報が必要になります。 まずは、ユーザ情報を格納する変数を用意します。  <code>javascript<br>// ----- グローバル変数 ----- //</code><br>let usersList = []; // ユーザ一覧<br>  続いて、ユーザ一覧表示処理 に <code>// 新</code>規コード追加部分 の1行処理を追加します。  &#34;`javascript // —– ユーザ一覧表示処理 —– // function renderUserslist(user) { const usersElm = document.querySelector(&#34;#users_list&#34;);  // コールバック関数 return (snapshot) =&gt; {   <pre><code>const newUsers = [];
+</code></pre>
+<pre><code>// 新規コード追加部分
+usersList = snapshot.val();
+</code></pre>
+<pre><code>// 自身を追加
+newUsers.push(`
+  &lt;div class=&#34;users_list__box-me&#34;&gt;
+    &lt;div class=&#34;users_list__icon&#34;&gt;
+      &lt;img src=&#34;${escapeHTML(user.photoURL)}&#34; /&gt;
+    &lt;/div&gt;&lt;div class=&#34;users_list__status&#34;&gt;
+      &lt;p class=&#34;users_list__name&#34;&gt;${escapeHTML(user.displayName)}&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`);
+</code></pre>
+<pre><code>// ユーザ情報を一つずつ取得し、表示用HTMLを組み立て
+snapshot.forEach((send_user) =&gt; {
+    // 自分以外のユーザのみ追加
+    if (user.uid !== send_user.val().uid) {
+        newUsers.push(`
+  &lt;div class=&#34;users_list__box&#34;&gt;
+    &lt;div class=&#34;users_list__icon&#34;&gt;
+      &lt;img src=&#34;${escapeHTML(send_user.val().photoURL)}&#34; /&gt;
+    &lt;/div&gt;&lt;div class=&#34;users_list__status&#34;&gt;
+      &lt;p class=&#34;users_list__name&#34;&gt;${escapeHTML(send_user.val().displayName)}&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`);
+    }
+});
+// ユーザ一覧表示エリアに描画
+usersElm.innerHTML = `
+</code></pre>
+<pre><code>${newUsers.join(&#34;&#34;)}
+</code></pre>
+ `;   <pre><code>// スクロール最下部へ移動
+usersElm.scrollTop = usersElm.scrollHeight;
+</code></pre>
+} } &#34;`  これで、ユーザ情報一覧の取得が可能になりました。     <h2 is-upgraded>表示処理部分の追加 </h2>
+   以下のコードを追加してください。  &#34;` javascript // —– メッセージ表示処理箇所 —– // function renderMessages(user) { const messagesElm = document.querySelector(&#34;#chat-messages&#34;); // コールバック関数 return (snapshot) =&gt; {   <pre><code>const newMessages = [];
+// messageを一つずつ取得し、表示用HTMLを組み立て
+snapshot.forEach((message) =&gt; {
+</code></pre>
+<pre><code>    if (user.uid === message.val().userId) {
+        // メッセージの送信者が自分の場合
+        newMessages.push(`
+  &lt;div class=&#34;chat-message-me&#34;&gt;
+    &lt;div class=&#34;chat-message__text&#34;&gt;
+      &lt;div class=&#34;chat-message__text-message&#34;&gt;
+        ${escapeHTML(message.val().text)}
+      &lt;/div&gt;
+      &lt;div class=&#34;chat-message__text-date&#34;&gt;
+        ${escapeHTML(formatDate(new Date(message.val().date)))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`);
+    } else {
+        // 自分以外が送信したメッセージの場合
+        newMessages.push(`
+  &lt;div class=&#34;chat-message-you&#34;&gt;
+    &lt;div class=&#34;chat-message__icon&#34;&gt;
+      &lt;img src=&#34;${escapeHTML(usersList[message.val().userId].photoURL)}&#34; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;chat-message__text&#34;&gt;
+      &lt;div class=&#34;chat-message__text-user-name&#34;&gt;
+        ${escapeHTML(usersList[message.val().userId].displayName)}
+      &lt;/div&gt;
+      &lt;div class=&#34;chat-message__text-message&#34;&gt;
+        ${escapeHTML(message.val().text)}
+      &lt;/div&gt;
+      &lt;div class=&#34;chat-message__text-date&#34;&gt;
+        ${escapeHTML(formatDate(new Date(message.val().date)))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+`);
+    }
+});
+// メッセージ表示エリアに描画
+messagesElm.innerHTML = `
+</code></pre>
+<pre><code>${newMessages.join(&#34;&#34;)}
+</code></pre>
+ `;   <pre><code>// スクロール最下部へ移動
+messagesElm.scrollTop = messagesElm.scrollHeight;
+</code></pre>
+} } &#34;`  こちらの処理は、先程ユーザ一覧を表示した際の処理内容とおおまかな流れは同じです。    <h2 is-upgraded>呼び出し部分の追加 </h2>
+   以下の <code>// 新</code>規コード追加部分 を追加してください。  &#34;`javascript // —– メッセージ送信処理箇所 —– // function enableMessages(user) { const messagesDb = firebase.database().ref(&#34;messages&#34;);  // 新規コード追加部分 messagesDb.on(&#34;value&#34;, renderMessages(user));  // メッセージ送信イベント登録 const messageTextInput = document.querySelector(&#34;#message-text&#34;); const messageButton = document.querySelector(&#34;#message-submit-button&#34;);  // 送信ボタンが押された場合 messageButton.addEventListener(&#34;click&#34;, () =&gt; {   <pre><code>// DBへ新規メッセージの登録
+messagesDb.push({
+    userId: user.uid,
+    date: new Date().getTime(), // タイムスタンプをセット (例：1602862031298)
+    text: messageTextInput.value,
+});
+// フォームの内容をリセット
+messageTextInput.value = &#34;&#34;;
+</code></pre>
+}); } &#34;<br><br><code>こち�</code>�もユーザ一覧を表示した際と同じく、on()<code>メソ</code>ッドを利用して、変更があった際にrenderMessages()` を呼び出すようにしています。    <h2 is-upgraded>動作確認をしてみる </h2>
+   それでは、実際にメッセージを送ってみます。  <img src="img\61abc8178a9b3eb8.png">  別のタブで新しく開いて、別のアカウントでログインするか、デプロイして他の人に共有することで他のアカウントともチャットできます。  ▼デプロイコマンド  <code>console<br>$ firebase deploy</code><br>    まとめ   Duration 00:05:00  ハンズオンお疲れ様でした。  今回のハンズオンでは、Firebaseの機能としては、  </li>
+<li>Firebase CLI   <ul>
+<li>Firebaseをコマンドラインで作成 / 編集 / 操作できるツール </li>
+</ul>
+</li>
+<li>Firebase Hosting   <ul>
+<li>Webアプリをデプロイできる </li>
+</ul>
+</li>
+<li>Firebase Authentication   <ul>
+<li>認証を導入できる </li>
+</ul>
+</li>
+<li>Realtime Database   <ul>
+<li>NoSQLのデータベースを導入できる </li>
+<li>同期させることができる  を実際に使用しました。  また、RealTimeDatabaseでは以下の3つのメソッドを使用しました。  </li>
+</ul>
+</li>
+<li><code>on()</code> : データベースを監視し変更等を同期できる </li>
+<li><code>set()</code> : データベースへの新規追加 / 更新が可能 </li>
+<li><code>push()</code> : データベースへの新規追加が可能（IDはランダム）  Firebaseの機能は勿論これだけではありません。 ただ、一部分を触っただけでもわかる通り、簡単に実装でき、高品質のアプリケーションを開発することが可能です。 趣味の開発やハッカソンやコンテスト等で導入してみてはいかがでしょうか？       FirebaseのDB、Realtime Database vs Cloud Firestore     <h2 is-upgraded>共通の強み </h2>
+    <h3 is-upgraded>リアルタイム性 </h3>
+  </li>
+<li>DB側の変更がクライアントに通知される  TODO: GIFアニメーションを追加する    <h3 is-upgraded>スキーマレス </h3>
+  </li>
+<li>スキーマとは？   <ul>
+<li>データの構造 </li>
+</ul>
+</li>
+<li>「スキーマレス」＝「データを自由に突っ込める！」 </li>
+<li>楽だけど注意が必要！   <ul>
+<li>データの中身がバラバラになってしまう危険性がある    <h2 is-upgraded>Realtime Databaseの特徴 </h2>
+    <h3 is-upgraded>情報構造 </h3>
+  </li>
+</ul>
+</li>
+<li>ほぼJSON     <h2 is-upgraded>Firestoreの特徴 </h2>
+    <h3 is-upgraded>情報構造 </h3>
+  </li>
+<li>コレクション/ドキュメント    <h2 is-upgraded>結局どっちが良いか？ </h2>
+  </li>
+<li>Firestoreを使うシーン   </li>
+<li>RealtimeDatabaseを使うシーン   <ul>
+<li>    参考にした記事   </li>
+</ul>
+</li>
+<li><a href="https://firebase.google.com/docs/firestore/firestore-for-rtdb?hl=ja" target="_blank">Firebase Realtime Database で Cloud Firestore を使用する - Firebase</a></li>
+<li><a href="https://firebase.google.com/docs/database/rtdb-vs-firestore?hl=ja" target="_blank">データベースを選択: Cloud Firestore または Realtime Database</a></li>
+<li><a href="https://techblog.kayac.com/rtdb-vs-firestore" target="_blank">Firebase Realtime DatabaseとFirestoreを使い分けていこうなという話 - KAYAC</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
